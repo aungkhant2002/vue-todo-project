@@ -13,14 +13,18 @@ let app = new Vue({
     methods: {
         create() {
             this.currentId++;
-            this.lists.push({id: this.currentId, message: this.newMessage, isDone: false, isEdit: false});
+            this.lists.push({
+                id: this.currentId,
+                message: this.newMessage,
+                isDone: false,
+                isEdit: false,
+                isDelete: false
+            });
             this.newMessage = "";
         },
 
         del(x) {
-            if (confirm("Are you sure to delete?")) {
-                this.lists = this.lists.filter(el => el.id !== x);
-            }
+            setTimeout(() => this.lists = this.lists.filter(el => el.id !== x), 600);
         }
 
     }

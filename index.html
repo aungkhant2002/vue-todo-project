@@ -8,6 +8,7 @@
     <title>Vue ToDo App</title>
     <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="node_modules/@fortawesome/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="node_modules/animate.css/animate.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -33,24 +34,34 @@
 
                 <!--                done section-->
                 <div class="d-flex justify-content-between">
-                    <p class="mb-0 font-weight-bold">Job List</p>
-                    <p class="badge badge-primary badge-pill">
+                    <p class="mb-0 font-weight-bold">Job List{{ lists.length > 1 ? "s" : "" }}</p>
+                    <p v-if="lists.length>0 && doneTotal === lists.length" class="badge badge-success badge-pill">
+                        All Done <i class="fas fa-check-circle"></i>
+                    </p>
+                    <p v-else class="badge badge-primary badge-pill">
                         Done {{ doneTotal }}
                     </p>
                 </div>
 
                 <!--                list section-->
-                <ul class="list-group">
-                    <li class="list-group-item d-flex justify-content-between align-items-center" v-for="list in lists"
+                <ul v-if="lists.length === 0" class="list-group">
+                    <li class="list-group-item text-center">There is no job 😞</li>
+                </ul>
+                <ul v-else class="list-group">
+                    <li :class="['list-group-item d-flex justify-content-between align-items-center created', {deleted: list.isDelete}]"
+                        v-for="list in lists"
                         :key="list.id">
-                        <input v-if="list.isEdit===true" type="text" v-model="list.message" class="form-control form-control-lg mr-2" @keyup.enter="list.isEdit=false">
+                        <input v-if="list.isEdit===true" type="text" v-model="list.message"
+                               class="form-control form-control-lg mr-2" @keyup.enter="list.isEdit=false">
                         <div v-else class="custom-control custom-checkbox">
-                            <input type="checkbox" v-model="list.isDone" class="custom-control-input" :id="'customCheck'+list.id">
-                            <label :for="'customCheck'+list.id" :class="['custom-control-label', {'done': list.isDone}]">{{ list.message }}</label>
+                            <input type="checkbox" v-model="list.isDone" class="custom-control-input"
+                                   :id="'customCheck'+list.id">
+                            <label :for="'customCheck'+list.id"
+                                   :class="['custom-control-label', {'done': list.isDone}]">{{ list.message }}</label>
                         </div>
                         <div class="">
                             <i class="fas fa-edit text-warning mr-2" @click="list.isEdit = true"></i>
-                            <i class="fas fa-trash-alt text-danger" @click="del(list.id)"></i>
+                            <i class="fas fa-trash-alt text-danger" @click="[list.isDelete=true, del(list.id)]"></i>
                         </div>
                     </li>
                 </ul>
