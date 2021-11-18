@@ -9679,7 +9679,7 @@
       }
       // tree management
       if (!stack.length && element !== root) {
-        // allow root elements with v-if.html, v-else-if and v-else
+        // allow root elements with v-if, v-else-if and v-else
         if (root.if && (element.elseif || element.else)) {
           {
             checkRootConstraints(element);
@@ -9691,7 +9691,7 @@
         } else {
           warnOnce(
             "Component template should contain exactly one root element. " +
-            "If you are using v-if.html on multiple elements, " +
+            "If you are using v-if on multiple elements, " +
             "use v-else-if to chain them instead.",
             { start: element.start }
           );
@@ -10085,7 +10085,7 @@
   }
 
   function processIf (el) {
-    var exp = getAndRemoveAttr(el, 'v-if.html');
+    var exp = getAndRemoveAttr(el, 'v-if');
     if (exp) {
       el.if = exp;
       addIfCondition(el, {
@@ -10113,7 +10113,7 @@
     } else {
       warn$2(
         "v-" + (el.elseif ? ('else-if="' + el.elseif + '"') : 'else') + " " +
-        "used on element <" + (el.tag) + "> without corresponding v-if.html.",
+        "used on element <" + (el.tag) + "> without corresponding v-if.",
         el.rawAttrsMap[el.elseif ? 'v-else-if' : 'v-else']
       );
     }
@@ -10127,7 +10127,7 @@
       } else {
         if (children[i].text !== ' ') {
           warn$2(
-            "text \"" + (children[i].text.trim()) + "\" between v-if.html and v-else(-if) " +
+            "text \"" + (children[i].text.trim()) + "\" between v-if and v-else(-if) " +
             "will be ignored.",
             children[i]
           );
@@ -10548,7 +10548,7 @@
       }
 
       if (typeBinding) {
-        var ifCondition = getAndRemoveAttr(el, 'v-if.html', true);
+        var ifCondition = getAndRemoveAttr(el, 'v-if', true);
         var ifConditionExtra = ifCondition ? ("&&(" + ifCondition + ")") : "";
         var hasElse = getAndRemoveAttr(el, 'v-else', true) != null;
         var elseIfCondition = getAndRemoveAttr(el, 'v-else-if', true);
@@ -10751,7 +10751,7 @@
     }
     return !!(node.pre || (
       !node.hasBindings && // no dynamic bindings
-      !node.if && !node.for && // not v-if.html or v-for or v-else
+      !node.if && !node.for && // not v-if or v-for or v-else
       !isBuiltInTag(node.tag) && // not a built-in
       isPlatformReservedTag(node.tag) && // not a component
       !isDirectChildOfTemplateFor(node) &&
@@ -11103,7 +11103,7 @@
       return ("" + (genTernaryExp(condition.block)))
     }
 
-    // v-if.html with v-once should generate code like (a)?_m(0):_m(1)
+    // v-if with v-once should generate code like (a)?_m(0):_m(1)
     function genTernaryExp (el) {
       return altGen
         ? altGen(el, state)
@@ -11276,7 +11276,7 @@
     // by default scoped slots are considered "stable", this allows child
     // components with only scoped slots to skip forced updates from parent.
     // but in some cases we have to bail-out of this optimization
-    // for example if the slot contains dynamic names, has v-if.html or v-for on them...
+    // for example if the slot contains dynamic names, has v-if or v-for on them...
     var needsForceUpdate = el.for || Object.keys(slots).some(function (key) {
       var slot = slots[key];
       return (
